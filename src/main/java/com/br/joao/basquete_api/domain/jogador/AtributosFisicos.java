@@ -1,5 +1,6 @@
 package com.br.joao.basquete_api.domain.jogador;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Data;

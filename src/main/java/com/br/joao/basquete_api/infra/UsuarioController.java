@@ -29,7 +29,7 @@ public class UsuarioController {
         String email = principal.getAttribute("email");
         String fotoUrl = principal.getAttribute("picture");
 
-        Usuario usuario = new Usuario();
+        Usuario usuario = new Usuario(id, nome, email, fotoUrl, "ROLE_USER");
         usuario.setId(id);
         usuario.setNome(nome);
         usuario.setEmail(email);

@@ -38,7 +38,8 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         // Salva ou atualiza o usuário no banco de dados
         usuarioRepository.findByEmail(email).orElseGet(() -> {
-            Usuario novoUsuario = new Usuario(id, nome, email, fotoUrl);
+            // 👇👇👇 ALTERAÇÃO FEITA AQUI 👇👇👇
+            Usuario novoUsuario = new Usuario(id, nome, email, fotoUrl, "ROLE_USER");
             return usuarioRepository.save(novoUsuario);
         });
 

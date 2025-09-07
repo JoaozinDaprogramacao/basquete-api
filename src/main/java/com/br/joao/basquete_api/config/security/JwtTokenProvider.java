@@ -4,12 +4,14 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
@@ -27,6 +29,11 @@ public class JwtTokenProvider {
         OAuth2User userPrincipal = (OAuth2User) authentication.getPrincipal();
         String email = userPrincipal.getAttribute("email");
 
+        // Pega as permissões (roles) do usuário autenticado
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
@@ -34,10 +41,11 @@ public class JwtTokenProvider {
                 .subject(email)
                 .issuedAt(now)
                 .expiration(validity)
+                // 👇👇👇 ADICIONE ESTA LINHA CRÍTICA 👇👇👇
+                .claim("roles", authorities) // Adiciona as permissões ao token
                 .signWith(key)
                 .compact();
     }
-
     public String getEmailFromToken(String token) {
         return Jwts.parser()
                 .verifyWith(key)
