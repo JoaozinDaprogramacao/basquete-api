@@ -22,7 +22,7 @@ public class DesempenhoTreino {
     // Muitos desempenhos estão associados a UM Jogador
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "jogador_id", nullable = false)
-    private com.br.joao.basquete_api.domain.jogador.Jogador jogador;
+    private Jogador jogador;
 
     // Muitos desempenhos estão associados a UM Treino
     @ManyToOne(fetch = FetchType.LAZY)
