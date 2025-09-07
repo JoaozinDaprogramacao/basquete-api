@@ -1,34 +1,31 @@
 package com.br.joao.basquete_api.infra;
 
+import com.br.joao.basquete_api.app.service.DesempenhoService;
 import com.br.joao.basquete_api.app.service.TreinoService;
 import com.br.joao.basquete_api.domain.jogador.DesempenhoTreino;
-import com.br.joao.basquete_api.domain.jogador.dto.DesempenhoCreateDTO;
-import com.br.joao.basquete_api.domain.jogador.dto.DesempenhoResponseDTO;
 import com.br.joao.basquete_api.domain.treino.Treino;
-import com.br.joao.basquete_api.domain.treino.dto.TreinoCreateDTO;
-import com.br.joao.basquete_api.domain.treino.dto.TreinoResponseDTO;
+import com.br.joao.basquete_api.domain.treino.dto.*;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/treinos")
 public class TreinoController {
 
     private final TreinoService treinoService;
+    private final DesempenhoService desempenhoService;
 
-    public TreinoController(TreinoService treinoService) {
+    public TreinoController(TreinoService treinoService, DesempenhoService desempenhoService) {
         this.treinoService = treinoService;
+        this.desempenhoService = desempenhoService;
     }
 
-    // --- Endpoints para Gerenciamento de Treinos (CRUD) ---
-
+    // 1. CRIAR UM NOVO TREINO
     @PostMapping
     public ResponseEntity<TreinoResponseDTO> criarTreino(@Valid @RequestBody TreinoCreateDTO treinoDTO) {
         Treino treinoSalvo = treinoService.criarTreino(treinoDTO);
@@ -39,33 +36,21 @@ public class TreinoController {
         return ResponseEntity.created(location).body(new TreinoResponseDTO(treinoSalvo));
     }
 
-    @GetMapping
-    public ResponseEntity<List<TreinoResponseDTO>> listarTodosTreinos() {
-        List<Treino> treinos = treinoService.listarTodos();
-        List<TreinoResponseDTO> responseDTOs = treinos.stream()
-                .map(TreinoResponseDTO::new)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(responseDTOs);
+    // 2. ADICIONAR UM JOGADOR AO TREINO
+    @PostMapping("/{treinoId}/jogadores")
+    public ResponseEntity<Void> adicionarJogador(@PathVariable UUID treinoId, @Valid @RequestBody AdicionarJogadorRequestDTO request) {
+        treinoService.adicionarJogadorAoTreino(treinoId, request.jogadorId());
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<TreinoResponseDTO> buscarTreinoPorId(@PathVariable UUID id) {
-        Treino treino = treinoService.buscarPorId(id);
-        return ResponseEntity.ok(new TreinoResponseDTO(treino));
-    }
-
-    // --- Endpoint Principal para Lançamento de Desempenho ---
-
-    @PostMapping("/{treinoId}/jogadores/{jogadorId}/desempenho")
-    public ResponseEntity<DesempenhoResponseDTO> lancarDesempenho(
+    // 3. REGISTRAR UM EVENTO DE DESEMPENHO PARA UM JOGADOR NO TREINO
+    @PostMapping("/{treinoId}/jogadores/{jogadorId}/eventos")
+    public ResponseEntity<DesempenhoResponseDTO> registrarEvento(
             @PathVariable UUID treinoId,
             @PathVariable UUID jogadorId,
-            @Valid @RequestBody DesempenhoCreateDTO desempenhoDTO) {
-
-        DesempenhoTreino novoDesempenho = treinoService.lancarDesempenho(treinoId, jogadorId, desempenhoDTO);
-
-        // A URI para um recurso aninhado é um pouco mais complexa de construir,
-        // mas para este caso, retornar o objeto criado com status 201 é suficiente e prático.
-        return ResponseEntity.status(201).body(new DesempenhoResponseDTO(novoDesempenho));
+            @Valid @RequestBody RegistrarEventoDTO eventoDTO
+    ) {
+        DesempenhoResponseDTO desempenhoAtualizado = desempenhoService.registrarEvento(treinoId, jogadorId, eventoDTO);
+        return ResponseEntity.ok(desempenhoAtualizado);
     }
 }
