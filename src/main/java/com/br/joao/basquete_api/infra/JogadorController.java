@@ -1,10 +1,10 @@
 package com.br.joao.basquete_api.infra;
 
 import com.br.joao.basquete_api.app.service.JogadorService;
-import com.br.joao.basquete_api.domain.Jogador.Jogador;
-import com.br.joao.basquete_api.domain.Jogador.dto.JogadorCreateDTO;
-import com.br.joao.basquete_api.domain.Jogador.dto.JogadorResponseDTO;
-import com.br.joao.basquete_api.domain.Jogador.dto.JogadorUpdateDTO;
+import com.br.joao.basquete_api.domain.jogador.Jogador;
+import com.br.joao.basquete_api.domain.jogador.dto.JogadorCreateDTO;
+import com.br.joao.basquete_api.domain.jogador.dto.JogadorResponseDTO;
+import com.br.joao.basquete_api.domain.jogador.dto.JogadorUpdateDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

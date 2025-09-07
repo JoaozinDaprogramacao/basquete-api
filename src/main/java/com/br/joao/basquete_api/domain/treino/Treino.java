@@ -1,4 +1,4 @@
-package com.br.joao.basquete_api.domain.Treino;
+package com.br.joao.basquete_api.domain.treino;
 
 import com.br.joao.basquete_api.domain.jogador.DesempenhoTreino;
 import jakarta.persistence.*;

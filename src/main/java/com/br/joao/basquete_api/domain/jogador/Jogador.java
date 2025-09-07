@@ -1,7 +1,6 @@
-package com.br.joao.basquete_api.domain.Jogador;
+package com.br.joao.basquete_api.domain.jogador;
 
-import com.br.joao.basquete_api.domain.Jogador.DesempenhoTreino;
-import com.br.joao.basquete_api.domain.Jogador.enums.Modulo;
+import com.br.joao.basquete_api.domain.jogador.enums.Modulo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +11,6 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import com.br.joao.basquete_api.domain.jogador.AtributosFisicos;
 
 @Data
 @NoArgsConstructor

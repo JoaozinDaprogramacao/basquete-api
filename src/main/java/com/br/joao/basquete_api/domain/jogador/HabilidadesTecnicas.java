@@ -1,4 +1,4 @@
-package com.br.joao.basquete_api.domain.Jogador;
+package com.br.joao.basquete_api.domain.jogador;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

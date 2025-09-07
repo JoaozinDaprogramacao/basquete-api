@@ -1,6 +1,6 @@
-package com.br.joao.basquete_api.domain.Jogador;
+package com.br.joao.basquete_api.domain.jogador;
 
-import com.br.joao.basquete_api.domain.Treino.Treino;
+import com.br.joao.basquete_api.domain.treino.Treino;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
